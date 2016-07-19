@@ -1,0 +1,136 @@
+/*
+ * Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+#include <dt-bindings/board/am335x-bbw-bbb-base.h>
+
+#include "am335x-peripheral-can1.dtsi"
+#include "am335x-bone-pinmux-can1.dtsi"
+
+#include "am335x-peripheral-ttyS4-485.dtsi"
+#include "am335x-bone-pinmux-ttyS4-485.dtsi"
+
+&am33xx_pinmux {
+	user_leds_s1: user_leds_s1 {
+		pinctrl-single,pins = <
+			BONE_P9_22 (PIN_OUTPUT | MUX_MODE7) /* spi0_sclk.gpio0_2 */
+		>;
+	};
+
+	bb_lcd_pwm_backlight_pins: pinmux_bb_lcd_pwm_backlight_pins {
+		pinctrl-single,pins = <
+			BONE_P9_14 (PIN_OUTPUT_PULLDOWN | MUX_MODE6) /* gpmc_a2.ehrpwm1a */
+		>;
+	};
+
+	keymap3_pins: pinmux_keymap3_pins {
+		pinctrl-single,pins = <
+			BONE_P9_18 (PIN_INPUT_PULLDOWN | MUX_MODE7)
+			BONE_P9_31 (PIN_INPUT_PULLDOWN | MUX_MODE7)
+			BONE_P9_25 (PIN_INPUT_PULLDOWN | MUX_MODE7)
+			BONE_P8_26 (PIN_INPUT_PULLDOWN | MUX_MODE7)
+		>;
+	};
+
+	edt_ft5306_ts_pins: pinmux_edt_ft5306_ts_pins {
+		pinctrl-single,pins = <
+			/* CAP_TSC gpmc_a1.gpio1_17, INPUT | MODE7 */
+			BONE_P9_23 (PIN_INPUT_PULLDOWN | MUX_MODE7)
+		>;
+	};
+	};
+};
+
+&tscadc {
+	status = "okay";
+	adc {
+		ti,adc-channels = <0 1 2 3 4 5 6>;
+		ti,chan-step-avg = <0x16 0x16 0x16 0x16 0x16 0x16 0x16>;
+		ti,chan-step-opendelay = <0x98 0x98 0x98 0x98 0x98 0x98 0x98>;
+		ti,chan-step-sampledelay = <0x0 0x0 0x0 0x0 0x0 0x0 0x0>;
+	};
+};
+
+&epwmss1 {
+	status = "okay";
+};
+
+
+&ehrpwm1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&bb_lcd_pwm_backlight_pins>;
+	status = "okay";
+};
+
+/ {
+	backlight {
+		status = "okay";
+		compatible = "pwm-backlight";
+		pwms = <&ehrpwm1 0 50000 0>;
+		brightness-levels = <255 152 101 75 62 62 56 53 51 0>;
+		default-brightness-level = <10>;
+	};
+
+	gpio_keys {
+		compatible = "gpio-keys";
+		pinctrl-names = "default";
+		pinctrl-0 = <&keymap3_pins>;
+
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		button@1 {
+			debounce_interval = <50>;
+			linux,code = <14>;
+			label = "backspace";
+			gpios = <&gpio0 7 0x1>;
+			gpio-key,wakeup;
+			autorepeat;
+		};
+		button@2 {
+			debounce_interval = <50>;
+			linux,code = <69>;
+			label = "menu";
+			gpios = <&gpio3 14 0x1>;
+			gpio-key,wakeup;
+			autorepeat;
+		};
+		button@3 {
+			debounce_interval = <50>;
+			linux,code = <28>;
+			label = "run";
+			gpios = <&gpio1 16 0x1>;
+			gpio-key,wakeup;
+			autorepeat;
+		};
+		button@4 {
+			debounce_interval = <50>;
+			linux,code = <143>;
+			label = "wakeup";
+			gpios = <&gpio1 29 0x1>;
+			gpio-key,wakeup;
+			autorepeat;
+		};
+	};
+
+	gpio-leds-cape-lcd {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+
+		pinctrl-0 = <&user_leds_s1>;
+
+		lcd-led0 {
+			label = "ade1tec:usr0";
+			gpios = <&gpio0 2 0>;
+			linux,default-trigger = "heartbeat";
+			default-state = "off";
+		};
+	};
+};
+
+#include "am335x-peripheral-panel-840x480-24bit-ade1tec.dtsi"
+#include "am335x-bone-pinmux-panel-840x480-24bit-ade1tec.dtsi"

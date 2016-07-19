@@ -1,0 +1,19 @@
+/*
+ * Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+&i2c2 {
+  pinctrl-names = "default";
+  pinctrl-0 = <&i2c2_pins>;
+
+  status = "okay";
+  clock-frequency = <100000>;
+  rtc: rtc@68 {
+    compatible = "maxim,ds1338";
+  	reg = <0x68>;
+	};
+};

@@ -1,0 +1,17 @@
+/*
+ * Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+&uart4 {
+	status = "okay";
+	pinctrl-names = "default";
+	rs485-rts-delay = <0 0>;
+
+	rts-gpio = <&gpio1 16 1>; /*  GPIO_ACTIVE_HIGH>; */
+	rs485-rts-active-high;
+	linux,rs485-enabled-at-boot-time;
+};
