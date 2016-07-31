@@ -66,8 +66,8 @@
 		status = "okay";
 		compatible = "pwm-backlight";
 		pwms = <&ehrpwm1 0 50000 0>;
-		brightness-levels = <255 152 101 75 62 62 56 53 51 0>;
-		default-brightness-level = <10>;
+		brightness-levels = <255 152 101 75 62 56 53 51 0>;
+		default-brightness-level = <8>;
 	};
 
 	gpio_keys {
@@ -125,7 +125,7 @@
 			default-state = "off";
 		};
 	};
-};
 
 #include "am335x-peripheral-panel-800x480-24bit-ade1tec.dtsi"
+};
 #include "am335x-bone-pinmux-panel-800x480-24bit-ade1tec.dtsi"
